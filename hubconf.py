@@ -26,7 +26,7 @@ import torchvision.transforms as transforms
 import tools._init_paths
 import models
 from config import config
-from config import update_config
+from config import set_config
 from core.function import validate
 from utils.modelsummary import get_model_summary
 from utils.utils import create_logger
@@ -36,35 +36,6 @@ import urllib.request
 
 _hubconf_path = os.path.dirname(__file__)
 
-def parse_args(yaml_file, pt_file):
-    parser = argparse.ArgumentParser(description='Train keypoints network')
-    
-    parser.add_argument('--cfg',
-                        help='experiment configure file name',
-                        type=str,
-                        default=yaml_file)
-
-    parser.add_argument('--modelDir',
-                        help='model directory',
-                        type=str,
-                        default='')
-    parser.add_argument('--logDir',
-                        help='log directory',
-                        type=str,
-                        default='')
-    parser.add_argument('--dataDir',
-                        help='data directory',
-                        type=str,
-                        default='')
-    parser.add_argument('--testModel',
-                        help='testModel',
-                        type=str,
-                        default=pt_file)
-
-    args = parser.parse_args()
-    update_config(config, args)
-
-    return args
 
 def create(yaml_file, pt_file, pretrained):
     """Creates a specified HRNet model
@@ -79,8 +50,8 @@ def create(yaml_file, pt_file, pretrained):
     """
     try:
         print('yaml_file: ', yaml_file)
-        print(" parse_args...")
-        args = parse_args(yaml_file, pt_file)
+        print(" set_config...")
+        args = set_config(config, yaml_file, pt_file)
         print(" eval...")
         model = eval('models.'+config.MODEL.NAME+'.get_cls_net')(config)
         print(" load_state_dict...")

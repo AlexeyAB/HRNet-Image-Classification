@@ -147,6 +147,21 @@ def update_config(cfg, args):
     cfg.freeze()
 
 
+def set_config(cfg, yaml_file, pt_file):
+    cfg.defrost()
+    cfg.merge_from_file(yaml_file)
+    cfg.TEST.MODEL_FILE = pt_file
+
+    cfg.OUTPUT_DIR = ''
+    cfg.LOG_DIR = ''
+    cfg.DATA_DIR = ''
+    
+    cfg.DATASET.ROOT = os.path.join(
+        cfg.DATA_DIR, cfg.DATASET.DATASET, 'images')
+
+    cfg.freeze()
+
+
 if __name__ == '__main__':
     import sys
     with open(sys.argv[1], 'w') as f:
